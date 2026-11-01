@@ -1,0 +1,53 @@
+
+# ---------------------------------------------------------------------------
+# Fallback: anything not matched below is owned by DevOp
+# ---------------------------------------------------------------------------
+*                                   @Legacy-Systeme-Dungeon/devops
+
+# ---------------------------------------------------------------------------
+# Developer: application source code and documentation
+# (tests and build/CI config are excluded by the rules further down)
+# ---------------------------------------------------------------------------
+/game/                              @Legacy-Systeme-Dungeon/developers
+/wizard/                            @Legacy-Systeme-Dungeon/developers
+/audience/                          @Legacy-Systeme-Dungeon/developers
+/tracking/                          @Legacy-Systeme-Dungeon/developers
+/doc/                               @Legacy-Systeme-Dungeon/developers
+/sprite-sheet-generator.py          @Legacy-Systeme-Dungeon/developers
+/README.md                          @Legacy-Systeme-Dungeon/developers
+
+# ---------------------------------------------------------------------------
+# Tester: test code and test fixtures
+# ---------------------------------------------------------------------------
+/game/test/                         @Legacy-Systeme-Dungeon/testers
+/game/test_assets/                  @Legacy-Systeme-Dungeon/testers
+/game/assets/levels/test/           @Legacy-Systeme-Dungeon/testers
+/wizard/test/                       @Legacy-Systeme-Dungeon/testers
+
+# ---------------------------------------------------------------------------
+# DevOp: build system, CI/CD, containers and repository configuration
+# ---------------------------------------------------------------------------
+# Gradle build
+/build.gradle                       @Legacy-Systeme-Dungeon/devops
+/settings.gradle                    @Legacy-Systeme-Dungeon/devops
+/dependencies.gradle                @Legacy-Systeme-Dungeon/devops
+/gradle.properties                  @Legacy-Systeme-Dungeon/devops
+/gradlew                            @Legacy-Systeme-Dungeon/devops
+/gradlew.bat                        @Legacy-Systeme-Dungeon/devops
+/gradle/                            @Legacy-Systeme-Dungeon/devops
+**/build.gradle                     @Legacy-Systeme-Dungeon/devops
+
+# Containers and deployment
+Dockerfile                          @Legacy-Systeme-Dungeon/devops
+*.dockerignore                      @Legacy-Systeme-Dungeon/devops
+/tracking/compose.yaml              @Legacy-Systeme-Dungeon/devops
+
+# Code style / formatting configuration
+/.checkstyle.xml                    @Legacy-Systeme-Dungeon/devops
+/.editorconfig                      @Legacy-Systeme-Dungeon/devops
+/.gitattributes                     @Legacy-Systeme-Dungeon/devops
+/.gitignore                         @Legacy-Systeme-Dungeon/devops
+
+# GitHub configuration, workflows and this file
+/.github/                           @Legacy-Systeme-Dungeon/devops
+/.github/CODEOWNERS                 @Legacy-Systeme-Dungeon/devops
