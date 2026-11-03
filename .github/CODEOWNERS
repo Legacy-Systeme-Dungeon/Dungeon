@@ -2,52 +2,52 @@
 # ---------------------------------------------------------------------------
 # Fallback: anything not matched below is owned by DevOp
 # ---------------------------------------------------------------------------
-*                                   @Legacy-Systeme-Dungeon/devops
+*                                   @Legacy-Systeme-Dungeon/devop
 
 # ---------------------------------------------------------------------------
 # Developer: application source code and documentation
 # (tests and build/CI config are excluded by the rules further down)
 # ---------------------------------------------------------------------------
-/game/                              @Legacy-Systeme-Dungeon/developers
-/wizard/                            @Legacy-Systeme-Dungeon/developers
-/audience/                          @Legacy-Systeme-Dungeon/developers
-/tracking/                          @Legacy-Systeme-Dungeon/developers
-/doc/                               @Legacy-Systeme-Dungeon/developers
-/sprite-sheet-generator.py          @Legacy-Systeme-Dungeon/developers
-/README.md                          @Legacy-Systeme-Dungeon/developers
+/game/                              @Legacy-Systeme-Dungeon/developer
+/wizard/                            @Legacy-Systeme-Dungeon/developer
+/audience/                          @Legacy-Systeme-Dungeon/developer
+/tracking/                          @Legacy-Systeme-Dungeon/developer
+/doc/                               @Legacy-Systeme-Dungeon/developer
+/sprite-sheet-generator.py          @Legacy-Systeme-Dungeon/developer
+/README.md                          @Legacy-Systeme-Dungeon/developer
 
 # ---------------------------------------------------------------------------
 # Tester: test code and test fixtures
 # ---------------------------------------------------------------------------
-/game/test/                         @Legacy-Systeme-Dungeon/testers
-/game/test_assets/                  @Legacy-Systeme-Dungeon/testers
-/game/assets/levels/test/           @Legacy-Systeme-Dungeon/testers
-/wizard/test/                       @Legacy-Systeme-Dungeon/testers
+/game/test/                         @Legacy-Systeme-Dungeon/tester
+/game/test_assets/                  @Legacy-Systeme-Dungeon/tester
+/game/assets/levels/test/           @Legacy-Systeme-Dungeon/tester
+/wizard/test/                       @Legacy-Systeme-Dungeon/tester
 
 # ---------------------------------------------------------------------------
 # DevOp: build system, CI/CD, containers and repository configuration
 # ---------------------------------------------------------------------------
 # Gradle build
-/build.gradle                       @Legacy-Systeme-Dungeon/devops
-/settings.gradle                    @Legacy-Systeme-Dungeon/devops
-/dependencies.gradle                @Legacy-Systeme-Dungeon/devops
-/gradle.properties                  @Legacy-Systeme-Dungeon/devops
-/gradlew                            @Legacy-Systeme-Dungeon/devops
-/gradlew.bat                        @Legacy-Systeme-Dungeon/devops
-/gradle/                            @Legacy-Systeme-Dungeon/devops
-**/build.gradle                     @Legacy-Systeme-Dungeon/devops
+/build.gradle                       @Legacy-Systeme-Dungeon/devop
+/settings.gradle                    @Legacy-Systeme-Dungeon/devop
+/dependencies.gradle                @Legacy-Systeme-Dungeon/devop
+/gradle.properties                  @Legacy-Systeme-Dungeon/devop
+/gradlew                            @Legacy-Systeme-Dungeon/devop
+/gradlew.bat                        @Legacy-Systeme-Dungeon/devop
+/gradle/                            @Legacy-Systeme-Dungeon/devop
+**/build.gradle                     @Legacy-Systeme-Dungeon/devop
 
 # Containers and deployment
-Dockerfile                          @Legacy-Systeme-Dungeon/devops
-*.dockerignore                      @Legacy-Systeme-Dungeon/devops
-/tracking/compose.yaml              @Legacy-Systeme-Dungeon/devops
+Dockerfile                          @Legacy-Systeme-Dungeon/devop
+*.dockerignore                      @Legacy-Systeme-Dungeon/devop
+/tracking/compose.yaml              @Legacy-Systeme-Dungeon/devop
 
 # Code style / formatting configuration
-/.checkstyle.xml                    @Legacy-Systeme-Dungeon/devops
-/.editorconfig                      @Legacy-Systeme-Dungeon/devops
-/.gitattributes                     @Legacy-Systeme-Dungeon/devops
-/.gitignore                         @Legacy-Systeme-Dungeon/devops
+/.checkstyle.xml                    @Legacy-Systeme-Dungeon/devop
+/.editorconfig                      @Legacy-Systeme-Dungeon/devop
+/.gitattributes                     @Legacy-Systeme-Dungeon/devop
+/.gitignore                         @Legacy-Systeme-Dungeon/devop
 
 # GitHub configuration, workflows and this file
-/.github/                           @Legacy-Systeme-Dungeon/devops
-/.github/CODEOWNERS                 @Legacy-Systeme-Dungeon/devops
+/.github/                           @Legacy-Systeme-Dungeon/devop
+/.github/CODEOWNERS                 @Legacy-Systeme-Dungeon/devop
