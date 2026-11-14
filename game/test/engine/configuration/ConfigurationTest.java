@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /** Tests for the {@link Configuration} class. */
 public class ConfigurationTest {
@@ -159,6 +159,50 @@ public class ConfigurationTest {
       invokeSetValueInPath(secondPath, "en");
 
       assertEquals(Map.of("theme", "dark", "language", "en"), invokeGetValueFromPath(intermediatePath));
+    }
+
+    @Test
+    void shouldOverwriteExistingValue() throws Exception {
+      String[] path = {"app", "settings", "theme"};
+
+      invokeSetValueInPath(path, "en");
+      assertEquals("en", invokeGetValueFromPath(path));
+      invokeSetValueInPath(path, "de");
+      assertEquals("de", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldAllowNullValue() throws Exception {
+      String[] path = {"app", "version"};
+
+      invokeSetValueInPath(path, null);
+      assertNull(invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldStoreDifferentValueTypes() throws Exception {
+      String[] firstPath = {"app", "version"};
+      String[] secondPath = {"app", "debugMode"};
+      String[] thirdPath = {"app", "title"};
+
+      invokeSetValueInPath(firstPath, 1.01);
+      invokeSetValueInPath(secondPath, true);
+      invokeSetValueInPath(thirdPath, "GameOfGames");
+
+      assertEquals(1.01, invokeGetValueFromPath(firstPath));
+      assertEquals(true, invokeGetValueFromPath(secondPath));
+      assertEquals("GameOfGames", invokeGetValueFromPath(thirdPath));
+    }
+
+    @Test
+    void shouldStoreListAsValue() throws Exception {
+      String[] path = {"app", "plugins"};
+
+      List<String> value = List.of("plugin1", "plugin2", "plugin3");
+
+      invokeSetValueInPath(path, value);
+
+      assertEquals(value, invokeGetValueFromPath(path));
     }
   }
 }
