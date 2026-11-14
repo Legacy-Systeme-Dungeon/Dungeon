@@ -11,7 +11,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /** Tests for the {@link Configuration} class. */
 public class ConfigurationTest {
@@ -203,6 +206,24 @@ public class ConfigurationTest {
       invokeSetValueInPath(path, value);
 
       assertEquals(value, invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldHandleNullPath() throws Exception {
+      assertDoesNotThrow(
+        () -> invokeSetValueInPath(null, "Test")
+      );
+
+      assertNull(invokeGetValueFromPath(null));
+    }
+
+    @Test
+    void shouldHandleEmptyPath() throws Exception {
+      assertDoesNotThrow(
+        () -> invokeSetValueInPath(new String[]{}, "Test")
+      );
+
+      assertNull(invokeGetValueFromPath(new String[]{}));
     }
   }
 }
