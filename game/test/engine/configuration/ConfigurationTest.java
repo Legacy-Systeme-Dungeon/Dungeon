@@ -1,68 +1,53 @@
 package engine.configuration;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import engine.utils.components.path.IPath;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 /** Tests for the {@link Configuration} class. */
 public class ConfigurationTest {
-
 
   private Configuration configuration;
   private Method setValueInPath;
   private Method getValueFromPath;
 
-  /** Create a basic Configuration instance
-   *  and setup reflection for private methods. */
+  /** Create a basic Configuration instance and setup reflection for private methods. */
   @BeforeEach
   void setUp() throws Exception {
     Constructor<Configuration> constructor =
-      Configuration.class.getDeclaredConstructor(
-        Class[].class, IPath.class);
+        Configuration.class.getDeclaredConstructor(Class[].class, IPath.class);
 
     constructor.setAccessible(true);
 
-    configuration = constructor.newInstance(
-      new Class<?>[0], null);
+    configuration = constructor.newInstance(new Class<?>[0], null);
 
     // Access private setValueInPath method
     setValueInPath =
-      Configuration.class.getDeclaredMethod(
-        "setValueInPath",
-        String[].class,
-        Object.class);
+        Configuration.class.getDeclaredMethod("setValueInPath", String[].class, Object.class);
 
     setValueInPath.setAccessible(true);
 
     // Access private getValueInPath method
-    getValueFromPath =
-      Configuration.class.getDeclaredMethod(
-        "getValueFromPath",
-        String[].class
-      );
+    getValueFromPath = Configuration.class.getDeclaredMethod("getValueFromPath", String[].class);
 
     getValueFromPath.setAccessible(true);
   }
 
-  private void invokeSetValueInPath(
-    String[] path, Object value) throws Exception {
+  private void invokeSetValueInPath(String[] path, Object value) throws Exception {
     setValueInPath.invoke(configuration, path, value);
   }
 
-  private Object invokeGetValueFromPath(String[] path)
-    throws Exception {
+  private Object invokeGetValueFromPath(String[] path) throws Exception {
     return getValueFromPath.invoke(configuration, (Object) path);
   }
 
@@ -76,8 +61,8 @@ public class ConfigurationTest {
   class SetValueInPath {
     @Test
     void shouldInitializeConfigRootWhenNull() throws Exception {
-      String[] path = new String[]{"name"};
-      invokeSetValueInPath(path,"Test");
+      String[] path = new String[] {"name"};
+      invokeSetValueInPath(path, "Test");
       assertEquals("Test", invokeGetValueFromPath(path));
     }
 
@@ -143,7 +128,7 @@ public class ConfigurationTest {
 
     @Test
     void shouldReplaceExistingNullIntermediateValueWithMap() throws Exception {
-      invokeSetValueInPath(new String[]{"app"}, null);
+      invokeSetValueInPath(new String[] {"app"}, null);
 
       String[] path = {"app", "name"};
 
@@ -161,7 +146,8 @@ public class ConfigurationTest {
       invokeSetValueInPath(firstPath, "dark");
       invokeSetValueInPath(secondPath, "en");
 
-      assertEquals(Map.of("theme", "dark", "language", "en"), invokeGetValueFromPath(intermediatePath));
+      assertEquals(
+          Map.of("theme", "dark", "language", "en"), invokeGetValueFromPath(intermediatePath));
     }
 
     @Test
@@ -176,8 +162,8 @@ public class ConfigurationTest {
 
     @Test
     void shouldOverwriteExistingMap() throws Exception {
-      String[] firstPath = new String[]{"app", "settings", "theme"};
-      String[] secondPath = new String[]{"app", "settings"};
+      String[] firstPath = new String[] {"app", "settings", "theme"};
+      String[] secondPath = new String[] {"app", "settings"};
 
       invokeSetValueInPath(firstPath, "dark");
 
@@ -223,20 +209,16 @@ public class ConfigurationTest {
 
     @Test
     void shouldHandleNullPath() throws Exception {
-      assertDoesNotThrow(
-        () -> invokeSetValueInPath(null, "Test")
-      );
+      assertDoesNotThrow(() -> invokeSetValueInPath(null, "Test"));
 
       assertNull(invokeGetValueFromPath(null));
     }
 
     @Test
     void shouldHandleEmptyPath() throws Exception {
-      assertDoesNotThrow(
-        () -> invokeSetValueInPath(new String[]{}, "Test")
-      );
+      assertDoesNotThrow(() -> invokeSetValueInPath(new String[] {}, "Test"));
 
-      assertNull(invokeGetValueFromPath(new String[]{}));
+      assertNull(invokeGetValueFromPath(new String[] {}));
     }
   }
 }
