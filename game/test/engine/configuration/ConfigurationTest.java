@@ -175,6 +175,19 @@ public class ConfigurationTest {
     }
 
     @Test
+    void shouldOverwriteExistingMap() throws Exception {
+      String[] firstPath = new String[]{"app", "settings", "theme"};
+      String[] secondPath = new String[]{"app", "settings"};
+
+      invokeSetValueInPath(firstPath, "dark");
+
+      invokeSetValueInPath(secondPath, "blue");
+
+      assertNull(invokeGetValueFromPath(firstPath));
+      assertEquals("blue", invokeGetValueFromPath(secondPath));
+    }
+
+    @Test
     void shouldAllowNullValue() throws Exception {
       String[] path = {"app", "version"};
 
