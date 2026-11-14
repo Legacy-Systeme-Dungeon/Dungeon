@@ -8,6 +8,15 @@ plugins {
     id 'com.diffplug.spotless' version "${spotlessVersion}"
     id 'com.google.protobuf' version "${protobufGradlePluginVersion}" apply false
     id 'com.github.jk1.dependency-license-report' version "${jk1licenseVersion}"
+    id 'org.sonarqube' version '7.5.0.8588'
+}
+
+// Host URL and token come from the SONAR_HOST_URL / SONAR_TOKEN environment variables.
+sonar {
+    properties {
+        property "sonar.projectKey", "Legacy-Systeme-Dungeon_Dungeon_8cb9cbf7-bbd2-44f9-868f-bbf1bf325a6c"
+        property "sonar.projectName", "Dungeon"
+    }
 }
 
 licenseReport {
