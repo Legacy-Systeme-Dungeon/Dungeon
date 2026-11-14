@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Tests for the {@link Configuration} class. */
 public class ConfigurationTest {
@@ -69,6 +70,23 @@ public class ConfigurationTest {
 
   @Nested
   class SetValueInPath {
-    //tests to be added
+    @Test
+    void shouldInitializeConfigRootWhenNull() throws Exception {
+      String[] path = new String[]{"name"};
+      invokeSetValueInPath(path,"Test");
+      assertEquals("Test", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldKeepExistingConfigRoot() throws Exception {
+      String[] firstPath = {"app", "name"};
+      String[] secondPath = {"app", "version"};
+
+      invokeSetValueInPath(firstPath, "MyApp");
+      invokeSetValueInPath(secondPath, "1.0");
+
+      assertEquals("MyApp", invokeGetValueFromPath(firstPath));
+      assertEquals("1.0", invokeGetValueFromPath(secondPath));
+    }
   }
 }
