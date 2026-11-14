@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -87,6 +88,77 @@ public class ConfigurationTest {
 
       assertEquals("MyApp", invokeGetValueFromPath(firstPath));
       assertEquals("1.0", invokeGetValueFromPath(secondPath));
+    }
+
+    @Test
+    void shouldSetValueAtNestedPath() throws Exception {
+      String[] path = {"database", "connection"};
+
+      invokeSetValueInPath(path, "localhost");
+
+      assertEquals("localhost", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldCreateIntermediateMapsAutomatically() throws Exception {
+      String[] path = {"app", "settings", "theme", "color"};
+
+      invokeSetValueInPath(path, "dark");
+
+      assertEquals("dark", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldHandleDeeplyNestedPath() throws Exception {
+      String[] path = {
+        "level1", "level2", "level3", "level4",
+        "level5", "level6", "level7", "value"
+      };
+
+      invokeSetValueInPath(path, "deepValue");
+
+      assertEquals("deepValue", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldAllowEmptyStringAsPathSegment() throws Exception {
+      String[] path = {"app", "", "name"};
+
+      invokeSetValueInPath(path, "MyApp");
+
+      assertEquals("MyApp", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldAllowNullAsPathSegment() throws Exception {
+      String[] path = {"app", null, "name"};
+
+      invokeSetValueInPath(path, "MyApp");
+
+      assertEquals("MyApp", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldReplaceExistingNullIntermediateValueWithMap() throws Exception {
+      invokeSetValueInPath(new String[]{"app"}, null);
+
+      String[] path = {"app", "name"};
+
+      invokeSetValueInPath(path, "MyApp");
+
+      assertEquals("MyApp", invokeGetValueFromPath(path));
+    }
+
+    @Test
+    void shouldReuseExistingIntermediateMaps() throws Exception {
+      String[] firstPath = {"app", "settings", "theme"};
+      String[] secondPath = {"app", "settings", "language"};
+      String[] intermediatePath = {"app", "settings"};
+
+      invokeSetValueInPath(firstPath, "dark");
+      invokeSetValueInPath(secondPath, "en");
+
+      assertEquals(Map.of("theme", "dark", "language", "en"), invokeGetValueFromPath(intermediatePath));
     }
   }
 }
