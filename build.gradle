@@ -50,6 +50,22 @@ subprojects {
 allprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
+    apply plugin: 'jacoco'
+
+    // Code coverage for SonarQube (0.8.14+ is required for Java 25 class files)
+    jacoco {
+        toolVersion = '0.8.14'
+    }
+
+    tasks.withType(Test).configureEach {
+        finalizedBy tasks.named('jacocoTestReport')
+    }
+
+    tasks.named('jacocoTestReport') {
+        reports {
+            xml.required = true
+        }
+    }
 
     java {
         toolchain {
