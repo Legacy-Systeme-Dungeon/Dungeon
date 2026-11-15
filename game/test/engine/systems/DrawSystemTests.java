@@ -62,10 +62,9 @@ class DrawSystemTest {
     // Entity C: Y=1, offset=0 -> effective Y = 1 (rendered last)
     Entity entityC = createEntity(0, 1, 0f, true);
 
-    TreeMap<Integer, List<Entity>> entities = new TreeMap<>();
-    entities.put(0, List.of(entityA, entityB, entityC));
+    List<Entity> entities = List.of(entityA, entityB, entityC);
 
-    List<DrawSystem.DSData> result = DrawSystem.prepareEntityGroup(entities, 0);
+    List<DrawSystem.DSData> result = DrawSystem.prepareEntityGroup(entities);
 
     assertEquals(3, result.size());
     assertEquals(entityB, result.get(0).e()); // effective Y = 7
@@ -78,21 +77,12 @@ class DrawSystemTest {
     Entity visibleEntity = createEntity(0, 2, 0f, true);
     Entity invisibleEntity = createEntity(0, 4, 0f, false);
 
-    TreeMap<Integer, List<Entity>> entities = new TreeMap<>();
-    entities.put(0, List.of(visibleEntity, invisibleEntity));
+    List<Entity> entities = List.of(visibleEntity, invisibleEntity);
 
-    List<DrawSystem.DSData> result = DrawSystem.prepareEntityGroup(entities, 0);
+    List<DrawSystem.DSData> result = DrawSystem.prepareEntityGroup(entities);
 
     assertEquals(1, result.size());
     assertEquals(visibleEntity, result.get(0).e());
   }
 
-  @Test
-  void testMissingDepthReturnsEmptyList() {
-    TreeMap<Integer, List<Entity>> entities = new TreeMap<>();
-    List<DrawSystem.DSData> result = DrawSystem.prepareEntityGroup(entities, 999);
-
-    assertNotNull(result);
-    assertTrue(result.isEmpty());
-  }
 }

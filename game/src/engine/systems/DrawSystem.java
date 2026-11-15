@@ -403,7 +403,7 @@ public final class DrawSystem extends System implements Disposable {
     TreeMap<Integer, FrameBuffer> depthFbos = new TreeMap<>();
     List<DSData> drawn = new ArrayList<>();
     for (Integer depth : sortedEntities.keySet()) {
-      List<DSData> sortedGroup = prepareEntityGroup(sortedEntities, depth);
+      List<DSData> sortedGroup = prepareEntityGroup(sortedEntities.get(depth));
 
       if (!sortedGroup.isEmpty()) {
         drawn.addAll(sortedGroup);
@@ -466,19 +466,17 @@ public final class DrawSystem extends System implements Disposable {
   }
 
   /**
-   * Prepare an entity depth group for drawing
-   * @param entities grouped entities
-   * @param depth
+   * Prepare a group of entities for drawing
+   * @param entities Entities that should be prepared for drawing in draw order
    * @return List of entities prepared for drawing in draw order
    */
-  /* package-private */ static List<DSData> prepareEntityGroup(TreeMap<Integer, List<Entity>> entities, Integer depth) {
-    return entities
-      .getOrDefault(depth, List.of()).stream()
+  /* package-private */ static List<DSData> prepareEntityGroup(List<Entity> entities) {
+    return entities.stream()
       .map(DSData::build)
+      .filter(DrawSystem::shouldDraw)
       .sorted(
           Comparator.comparingDouble(
               (DSData d) -> -(EntityUtils.getPosition(d.e).y() + d.dc.sortOffset())))
-      .filter(DrawSystem::shouldDraw)
       .toList();
   }
 
@@ -1198,8 +1196,6 @@ public final class DrawSystem extends System implements Disposable {
                     || level.tileAt(entityCenter).filter(tile -> tile.visible()).isPresent())
         .orElse(false);
   }
-
-//  private boolean shouldDraw(DSData data) { return DrawSystem.shouldDraw(data); }
 
   // endregion
 
