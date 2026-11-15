@@ -22,6 +22,11 @@ class DrawSystemTest {
 
   @BeforeEach
   void setUp() {
+    // Game and camera system setup are required so that shouldDraw() works correctly
+    // Ensure ECS system state is clean and required systems are present
+    Game.removeAllSystems();
+    Game.add(new LevelSystem());
+
     // Reset camera position to origin for deterministic frustum culling
     CameraSystem.camera().viewportWidth = 20;
     CameraSystem.camera().viewportHeight = 20;
