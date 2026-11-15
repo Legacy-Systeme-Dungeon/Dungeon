@@ -403,14 +403,7 @@ public final class DrawSystem extends System implements Disposable {
     TreeMap<Integer, FrameBuffer> depthFbos = new TreeMap<>();
     List<DSData> drawn = new ArrayList<>();
     for (Integer depth : sortedEntities.keySet()) {
-      List<DSData> sortedGroup =
-          sortedEntities.get(depth).stream()
-              .map(DSData::build)
-              .sorted(
-                  Comparator.comparingDouble(
-                      (DSData d) -> -(EntityUtils.getPosition(d.e).y() + d.dc.sortOffset())))
-              .filter(this::shouldDraw)
-              .toList();
+      List<DSData> sortedGroup = prepareEntityGroup(sortedEntities, depth);
 
       if (!sortedGroup.isEmpty()) {
         drawn.addAll(sortedGroup);
@@ -470,6 +463,17 @@ public final class DrawSystem extends System implements Disposable {
 
     FBO_POOL.free(fboA);
     FBO_POOL.free(fboB);
+  }
+
+  /* package-private */ static List<DSData> prepareEntityGroup(TreeMap<Integer, List<Entity>> entities, Integer depth) {
+    return entities
+      .getOrDefault(depth, List.of()).stream()
+      .map(DSData::build)
+      .sorted(
+          Comparator.comparingDouble(
+              (DSData d) -> -(EntityUtils.getPosition(d.e).y() + d.dc.sortOffset())))
+      .filter(DrawSystem::shouldDraw)
+      .toList();
   }
 
   /**
@@ -1083,7 +1087,7 @@ public final class DrawSystem extends System implements Disposable {
       if (group == null) continue;
       group.stream()
           .map(DSData::build)
-          .filter(this::shouldDraw)
+          .filter(DrawSystem::shouldDraw)
           .forEach(d -> atmosphere.drawShadow(batch(), d.dc, d.pc));
     }
     atmosphere.drawGroundParticles(batch());
@@ -1162,7 +1166,7 @@ public final class DrawSystem extends System implements Disposable {
    * @return true if the entity should be drawn, false otherwise
    * @see DrawComponent#isVisible()
    */
-  private boolean shouldDraw(DSData data) {
+  private static boolean shouldDraw(DSData data) {
     if (!data.dc.isVisible()) {
       return false;
     }
@@ -1189,6 +1193,8 @@ public final class DrawSystem extends System implements Disposable {
         .orElse(false);
   }
 
+//  private boolean shouldDraw(DSData data) { return DrawSystem.shouldDraw(data); }
+
   // endregion
 
   /**
@@ -1211,7 +1217,7 @@ public final class DrawSystem extends System implements Disposable {
     return getInstance().shadersActiveLastFrame;
   }
 
-  private record DSData(Entity e, DrawComponent dc, PositionComponent pc) {
+  /* package-private */ record DSData(Entity e, DrawComponent dc, PositionComponent pc) {
     /**
      * Builds the data record used by this system.
      *
