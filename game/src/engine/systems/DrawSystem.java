@@ -465,6 +465,12 @@ public final class DrawSystem extends System implements Disposable {
     FBO_POOL.free(fboB);
   }
 
+  /**
+   * Prepare an entity depth group for drawing
+   * @param entities grouped entities
+   * @param depth
+   * @return List of entities prepared for drawing in draw order
+   */
   /* package-private */ static List<DSData> prepareEntityGroup(TreeMap<Integer, List<Entity>> entities, Integer depth) {
     return entities
       .getOrDefault(depth, List.of()).stream()
