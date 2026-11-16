@@ -11,7 +11,6 @@ import engine.level.elements.ILevel;
 import engine.utils.Point;
 import java.util.List;
 import java.util.Optional;
-import java.util.TreeMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,5 +88,4 @@ class DrawSystemTest {
     assertEquals(1, result.size());
     assertEquals(visibleEntity, result.get(0).e());
   }
-
 }

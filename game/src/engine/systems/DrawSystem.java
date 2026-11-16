@@ -467,17 +467,18 @@ public final class DrawSystem extends System implements Disposable {
 
   /**
    * Prepare a group of entities for drawing
+   *
    * @param entities Entities that should be prepared for drawing in draw order
    * @return List of entities prepared for drawing in draw order
    */
   /* package-private */ static List<DSData> prepareEntityGroup(List<Entity> entities) {
     return entities.stream()
-      .map(DSData::build)
-      .filter(DrawSystem::shouldDraw)
-      .sorted(
-          Comparator.comparingDouble(
-              (DSData d) -> -(EntityUtils.getPosition(d.e).y() + d.dc.sortOffset())))
-      .toList();
+        .map(DSData::build)
+        .filter(DrawSystem::shouldDraw)
+        .sorted(
+            Comparator.comparingDouble(
+                (DSData d) -> -(EntityUtils.getPosition(d.e).y() + d.dc.sortOffset())))
+        .toList();
   }
 
   /**
