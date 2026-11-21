@@ -13,4 +13,11 @@ public class BasicTestConfig {
   // Nested configuration key
   public static final ConfigKey<Integer> TEST_VALUE_NESTED =
     new ConfigKey<>(new String[]{"test02", "test10"}, new ConfigIntValue(75));
+
+  //resets for test isolation
+  static void reset() {
+    TEST_VALUE_SIMPLE_0.value(50);
+    TEST_VALUE_SIMPLE_1.value(10);
+    TEST_VALUE_NESTED.value(75);
+  }
 }
