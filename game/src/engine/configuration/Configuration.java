@@ -78,12 +78,12 @@ public class Configuration {
    */
   @SuppressWarnings("unchecked")
   private void setValueInPath(String[] path, Object value) {
+    if (configRoot == null) {
+      configRoot = new HashMap<>();
+    }
     if (path == null || path.length == 0) {
       LOGGER.warn("Attempted to set value with no path.");
       return;
-    }
-    if (configRoot == null) {
-      configRoot = new HashMap<>();
     }
 
     Map<String, Object> currentMap = configRoot;
