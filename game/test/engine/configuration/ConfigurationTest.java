@@ -31,18 +31,17 @@ public class ConfigurationTest {
     return Configuration.loadAndGetConfiguration(configIPath, configClasses);
   }
 
-  @SuppressWarnings("unchecked")
   private Map<String, Object> readConfigurationJson(Path file)
     throws IOException {
 
     String content = Files.readString(file);
 
-    return (Map<String, Object>) JsonHandler.readJson(content);
+    return JsonHandler.readJson(content);
   }
 
   /** Create a basic Configuration instance */
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     temporaryConfigFile = tempDir.resolve("test-config.json");
     configIPath = new SimpleIPath(temporaryConfigFile.toString());
   }
@@ -63,6 +62,7 @@ public class ConfigurationTest {
     /**
      * should keep field existing
      */
+    @SuppressWarnings("unchecked")
     @Test
     void test_initialisation_with_valid_json() throws IOException {
       Files.writeString(temporaryConfigFile, "{\"existing\": \"10\"}");
@@ -81,6 +81,7 @@ public class ConfigurationTest {
     /**
      * should overwrite json completely
      */
+    @SuppressWarnings("unchecked")
     @Test
     void test_initialisation_with_invalid_json() throws IOException {
       Files.writeString(temporaryConfigFile, "{\"existing\": \"10\"");
@@ -99,6 +100,7 @@ public class ConfigurationTest {
     /**
      * should not replace values with defaults
      */
+    @SuppressWarnings("unchecked")
     @Test
     void test_initialisation_with_complete_json() throws IOException {
       Files.writeString(temporaryConfigFile,
@@ -142,6 +144,7 @@ public class ConfigurationTest {
   @Nested
   class ConfigMapTests {
 
+    @SuppressWarnings("unchecked")
     @Test
     void test_config_map_applies_path_prefix() throws IOException {
       Configuration config = loadTestConfiguration(BasicTestConfig.class);
@@ -152,6 +155,7 @@ public class ConfigurationTest {
       assertEquals("75", ((Map<String, Object>) json.get("test02")).get("test10"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void test_config_map_shares_path_prefix() throws IOException {
       Files.writeString(temporaryConfigFile,
