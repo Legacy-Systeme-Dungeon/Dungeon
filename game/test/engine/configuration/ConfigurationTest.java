@@ -26,17 +26,33 @@ public class ConfigurationTest {
   private IPath configIPath;
   private Path temporaryConfigFile;
 
-  private Configuration loadTestConfiguration(Class<?>... configClasses)
-    throws IOException {
+  private Configuration loadTestConfiguration(Class<?>... configClasses) throws IOException {
     return Configuration.loadAndGetConfiguration(configIPath, configClasses);
   }
 
-  private Map<String, Object> readConfigurationJson(Path file)
-    throws IOException {
-
+  private Map<String, Object> readConfigurationJson(Path file) throws IOException {
     String content = Files.readString(file);
-
     return JsonHandler.readJson(content);
+  }
+
+  @ConfigMap(path = {"first"})
+  static class FirstMultipleMapTestConfig {
+    static final ConfigKey<Integer> FIRST_KEY =
+      new ConfigKey<>(new String[]{"value"}, new ConfigIntValue(10));
+
+    static void reset() {
+      FIRST_KEY.value(10);
+    }
+  }
+
+  @ConfigMap(path = {"second"})
+  static class SecondMultipleMapTestConfig {
+    static final ConfigKey<Integer> SECOND_KEY =
+      new ConfigKey<>(new String[]{"value"}, new ConfigIntValue(20));
+
+    static void reset() {
+      SECOND_KEY.value(20);
+    }
   }
 
   /** Create a basic Configuration instance */
@@ -49,6 +65,8 @@ public class ConfigurationTest {
   @AfterEach
   void tearDown() {
     BasicTestConfig.reset();
+    FirstMultipleMapTestConfig.reset();
+    SecondMultipleMapTestConfig.reset();
   }
 
   @Nested
@@ -194,6 +212,58 @@ public class ConfigurationTest {
 
       assertNotNull(config);
       assertEquals("10", json.get(""));
+    }
+
+    @Test
+    void test_update_nested_key_preserves_sibling_keys() throws IOException {
+      Files.writeString(
+        temporaryConfigFile,
+        "{\"test02\": {" +
+          "\"test11\": \"50\"" +
+          "}" +
+          "}"
+      );
+
+      Configuration config = loadTestConfiguration(BasicTestConfig.class);
+
+      config.update(new ConfigKey<>(new String[]{"test02", "test10"}, new ConfigIntValue(100)));
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertEquals("100", ((Map<String, Object>) json.get("test02")).get("test10"));
+      assertEquals("50", ((Map<String, Object>) json.get("test02")).get("test11"));
+    }
+
+    /** should add both with their annotated prefixes */
+    @Test
+    void test_multiple_config_map_classes() throws IOException {
+      Configuration config = loadTestConfiguration(
+        FirstMultipleMapTestConfig.class,
+        SecondMultipleMapTestConfig.class
+      );
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertNotNull(config);
+
+      assertEquals("10", ((Map<String, Object>) json.get("first")).get("value"));
+      assertEquals("20", ((Map<String, Object>) json.get("second")).get("value"));
+    }
+  }
+
+  @Nested
+  class CacheTests {
+    @Test
+    void test_repeated_configuration_initialization_returns_cached_instance() throws IOException {
+      Configuration firstConfig =
+        loadTestConfiguration(BasicTestConfig.class);
+
+      Configuration secondConfig =
+        loadTestConfiguration(BasicTestConfig.class);
+
+      assertNotNull(firstConfig);
+      assertNotNull(secondConfig);
+      assertSame(firstConfig, secondConfig);
     }
   }
 }
