@@ -1,5 +1,6 @@
 package engine.configuration;
 
+import engine.configuration.values.ConfigIntValue;
 import engine.utils.JsonHandler;
 import engine.utils.components.path.IPath;
 import engine.utils.components.path.SimpleIPath;
@@ -135,6 +136,60 @@ public class ConfigurationTest {
 
       assertNotNull(config);
       assertEquals("50", json.get("test00"));
+    }
+  }
+
+  @Nested
+  class ConfigMapTests {
+
+    @Test
+    void test_config_map_applies_path_prefix() throws IOException {
+      Configuration config = loadTestConfiguration(BasicTestConfig.class);
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertNotNull(config);
+      assertEquals("75", ((Map<String, Object>) json.get("test02")).get("test10"));
+    }
+
+    @Test
+    void test_config_map_shares_path_prefix() throws IOException {
+      Files.writeString(temporaryConfigFile,
+        "{ \"test02\": { \"test11\": \"50\"}}");
+      Configuration config = loadTestConfiguration(BasicTestConfig.class);
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertNotNull(config);
+      Map<String, Object> sharedMap = (Map<String, Object>) json.get("test02");
+      assertEquals("75", sharedMap.get("test10"));
+      assertEquals("50", sharedMap.get("test11"));
+    }
+
+    /** should abort and do nothing */
+    @Test
+    void test_config_map_empty_path() throws IOException {
+      Configuration config = loadTestConfiguration(BasicTestConfig.class);
+
+      config.update(new ConfigKey<>(new String[]{}, new ConfigIntValue(10)));
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertNotNull(config);
+      assertNull(json.get(""));
+    }
+
+    /** should add empty string as key*/
+    @Test
+    void test_config_map_empty_string_in_path() throws IOException {
+      Configuration config = loadTestConfiguration(BasicTestConfig.class);
+
+      config.update(new ConfigKey<>(new String[]{""}, new ConfigIntValue(10)));
+
+      Map<String, Object> json = readConfigurationJson(temporaryConfigFile);
+
+      assertNotNull(config);
+      assertEquals("10", json.get(""));
     }
   }
 }
