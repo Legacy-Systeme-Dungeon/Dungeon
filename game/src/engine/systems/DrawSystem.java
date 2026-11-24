@@ -1211,7 +1211,7 @@ public final class DrawSystem extends System implements Disposable {
     return getInstance().shadersActiveLastFrame;
   }
 
-  private record DSData(Entity e, DrawComponent dc, PositionComponent pc) {
+  public record DSData(Entity e, DrawComponent dc, PositionComponent pc) {
     /**
      * Builds the data record used by this system.
      *
