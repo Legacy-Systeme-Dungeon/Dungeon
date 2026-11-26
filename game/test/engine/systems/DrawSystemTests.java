@@ -74,7 +74,7 @@ class DrawSystemTest {
 
     assertEquals(3, result.size());
     assertEquals(entityB, result.get(0).e()); // effective Y = 7
-    assertEquals(entityA, result.get(1).e()); // effective Y = 5
+    assertEquals(entityA, result.get(1).e()); // effective Y = 3
     assertEquals(entityC, result.get(2).e()); // effective Y = 1
   }
 
