@@ -21,7 +21,7 @@ import engine.sound.Sounds;
 public class BaseContainerUI extends Table implements IResizable {
 
   private Actor content;
-  private int align;
+  private int contentAlign;
   private float offsetX;
   private float offsetY;
   private boolean grow;
@@ -68,7 +68,7 @@ public class BaseContainerUI extends Table implements IResizable {
    */
   public BaseContainerUI(
       Actor content, int align, float offsetX, float offsetY, boolean grow, boolean playSound) {
-    this.align = align;
+    this.contentAlign = align;
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     this.grow = grow;
@@ -135,7 +135,7 @@ public class BaseContainerUI extends Table implements IResizable {
    * @param align The alignment (use {@link Align} constants).
    */
   public void setAlign(int align) {
-    this.align = align;
+    this.contentAlign = align;
     positionContent();
   }
 
@@ -159,7 +159,7 @@ public class BaseContainerUI extends Table implements IResizable {
    * @param offsetY The Y offset.
    */
   public void setPlacement(int align, float offsetX, float offsetY) {
-    this.align = align;
+    this.contentAlign = align;
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     positionContent();
@@ -171,19 +171,19 @@ public class BaseContainerUI extends Table implements IResizable {
     }
 
     this.clearChildren();
-    this.align(align);
+    this.align(contentAlign);
 
-    Cell<Actor> cell = this.add(content).align(align);
+    Cell<Actor> cell = this.add(content).align(contentAlign);
 
     if (grow) cell.grow();
 
-    if ((align & Align.right) != 0) {
+    if ((contentAlign & Align.right) != 0) {
       cell.padRight(offsetX);
     } else {
       cell.padLeft(offsetX);
     }
 
-    if ((align & Align.top) != 0) {
+    if ((contentAlign & Align.top) != 0) {
       cell.padTop(offsetY);
     } else {
       cell.padBottom(offsetY);
